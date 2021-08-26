@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-
+import { OperationType, Statement } from "../../entities/Statement";
 import { IUsersRepository } from "../../../users/repositories/IUsersRepository";
 import { IStatementsRepository } from "../../repositories/IStatementsRepository";
 import { CreateStatementError } from "./CreateStatementError";
@@ -22,7 +22,7 @@ export class CreateStatementUseCase {
       throw new CreateStatementError.UserNotFound();
     }
 
-    if(type === 'withdraw') {
+    if (type === OperationType.WITHDRAW || type === OperationType.TRANSFER) {
       const { balance } = await this.statementsRepository.getUserBalance({ user_id });
 
       if (balance < amount) {
